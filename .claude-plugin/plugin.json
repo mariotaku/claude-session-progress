@@ -1,6 +1,6 @@
 {
   "name": "session-progress",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "A Progress pane beside the chat that shows how the session's work is going: goal, tickets, time left, and what needs you.",
   "author": { "name": "Mariotaku" },
   "license": "MIT",
