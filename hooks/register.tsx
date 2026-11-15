@@ -39,6 +39,7 @@ import {
   sessionsToPrune,
   svgBar,
   svgDivider,
+  svgMark,
   textBar,
   truncate,
   waitPolicy,
@@ -710,19 +711,39 @@ export const register: Register = (on, options) => {
               {progress.tickets.length === 0 && <Text dimColor>{t.noTickets}</Text>}
               {progress.tickets.map(ticket => (
                 <Box flexDirection="column">
-                  <Button
-                    key={`ticket:${ticket.id}`}
-                    plain
-                    onPress={() => {
-                      openTicket = ticket.id
-                      redraw()
-                    }}
-                  >
-                    <Text color={STATUS_COLOR[ticket.status]}>
-                      {STATUS_MARK[ticket.status]}
-                    </Text>
-                    {` ${ticket.id} ${isTerminal ? truncate(ticket.title, titleRoom - cellWidth(ticket.id)) : ticket.title}`}
-                  </Button>
+                  {isTerminal ? (
+                    <Button
+                      key={`ticket:${ticket.id}`}
+                      plain
+                      onPress={() => {
+                        openTicket = ticket.id
+                        redraw()
+                      }}
+                    >
+                      <Text color={STATUS_COLOR[ticket.status]}>
+                        {STATUS_MARK[ticket.status]}
+                      </Text>
+                      {` ${ticket.id} ${truncate(ticket.title, titleRoom - cellWidth(ticket.id))}`}
+                    </Button>
+                  ) : (
+                    // A Button holds only text, so the icon sits beside it.
+                    <Box flexDirection="row" alignItems="center" columnGap={1}>
+                      <Svg
+                        source={svgMark(ticket.status)}
+                        alt={t.ticketStatus[ticket.status]}
+                      />
+                      <Button
+                        key={`ticket:${ticket.id}`}
+                        plain
+                        onPress={() => {
+                          openTicket = ticket.id
+                          redraw()
+                        }}
+                      >
+                        {`${ticket.id} ${ticket.title}`}
+                      </Button>
+                    </Box>
+                  )}
                   <Text dimColor wrap="truncate-end">
                     {`  ${ticketLine(ticket)}`}
                   </Text>

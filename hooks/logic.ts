@@ -1168,6 +1168,26 @@ export function svgBar(
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">${rects.join('')}</svg>`
 }
 
+/**
+ * A ticket's status mark as an SVG icon, `size` pixels square. The apps draw
+ * this in place of the text glyph, which each system font draws differently.
+ */
+export function svgMark(status: TicketStatus, size = 14): string {
+  const color = BAR_COLORS[status]
+  const ring = `<circle cx="8" cy="8" r="6.25" fill="none" stroke="${color}" stroke-width="1.5"/>`
+  const disc = `<circle cx="8" cy="8" r="7" fill="${color}"/>`
+  const stroke = 'fill="none" stroke="#fff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"'
+  const body: Record<TicketStatus, string> = {
+    done: `${disc}<path d="M4.75 8.25l2.25 2.25 4.25-4.75" ${stroke}/>`,
+    working: `${ring}<circle cx="8" cy="8" r="3.5" fill="${color}"/>`,
+    blocked: `${disc}<path d="M5.5 5.5l5 5M10.5 5.5l-5 5" ${stroke}/>`,
+    not_started: ring,
+    skipped: `${ring}<path d="M5 8h6" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>`,
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="mark ${status}" width="${size}" height="${size}" viewBox="0 0 16 16">${body[status]}</svg>`
+}
+
 export function svgDivider(width: number): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="1" viewBox="0 0 ${width} 1" preserveAspectRatio="none"><rect x="0" y="0" width="${width}" height="1" fill="#8c959f" fill-opacity="0.5"/></svg>`
 }

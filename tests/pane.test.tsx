@@ -205,7 +205,7 @@ test('the open tab is remembered', async ($, on) => {
   await second.unmount()
 })
 
-test('the terminal draws the bar and divider as text; the apps draw them as Svg', async ($, on) => {
+test('the terminal draws the bar, divider and marks as text; the apps draw them as Svg', async ($, on) => {
   world(on)
   await $.session.start(START)
   await progress($, SAMPLE)
@@ -222,9 +222,14 @@ test('the terminal draws the bar and divider as text; the apps draw them as Svg'
 
   for (const surface of APPS) {
     const ui = await $.ui.mount({ ...PANE, surface })
-    const drawn = await ui.findAll({ type: 'Svg' })
+    const all = await ui.findAll({ type: 'Svg' })
+    const marks = all.filter(one => String(one.props.source).includes('class="mark '))
+    const drawn = all.filter(one => !marks.includes(one))
 
     expect(drawn).toHaveLength(2)
+    expect(marks.map(one => one.props.alt)).toEqual(['done', 'working', 'not started'])
+    expect((await ui.find({ key: 'ticket:T01' }))?.text).toBe('T01 Parse the feed')
+    expect(await ui.find({ type: 'Text', text: /^[✓●✗○–]$/ })).toBeUndefined()
     expect(String(drawn[0]?.props.source)).toContain('class="fill" data-ticket="T01"')
     expect(String(drawn[0]?.props.source)).toContain('class="bg" data-ticket="T03"')
     expect(drawn[0]?.props.alt).toBe('Progress bar: 50% done')

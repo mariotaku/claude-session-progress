@@ -23,6 +23,7 @@ import {
   segments,
   sessionsToPrune,
   svgBar,
+  svgMark,
   textBar,
   workedMs,
 } from '../hooks/logic'
@@ -106,6 +107,19 @@ describe('the bar', () => {
     expect(svg).toMatch(/data-ticket="T02"[^>]*fill="#d4a72c"/)
     expect(svg).toMatch(/data-ticket="T03"[^>]*fill="#8c959f"/)
     expect(svg).toMatch(/data-ticket="T04"[^>]*fill="#cf222e"/)
+  })
+
+  test('each status has its own square SVG mark in the bar color', () => {
+    const statuses = ['done', 'working', 'blocked', 'not_started', 'skipped'] as const
+    const marks = statuses.map(status => svgMark(status))
+
+    expect(new Set(marks).size).toBe(statuses.length)
+    for (const [i, status] of statuses.entries()) {
+      expect(marks[i]).toStartWith('<svg ')
+      expect(marks[i]).toContain(`class="mark ${status}" width="14" height="14"`)
+    }
+    expect(marks[0]).toContain('#2da44e')
+    expect(marks[2]).toContain('#cf222e')
   })
 })
 
