@@ -1,0 +1,17 @@
+{
+  "name": "session-progress",
+  "version": "0.5.2",
+  "description": "A Progress pane beside the chat that shows how the session's work is going: goal, tickets, time left, and what needs you.",
+  "author": { "name": "Mariotaku" },
+  "license": "MIT",
+  "repository": "https://github.com/mariotaku/claude-session-progress",
+  "userConfig": {
+    "whileQuestionWaits": {
+      "type": "string",
+      "title": "While a question waits",
+      "description": "What Claude does while a question in the Progress pane has no answer: stop and wait, work around it on tickets that do not depend on the answer, or keep building on its recommended option.",
+      "options": ["stop", "work_around", "keep_building"],
+      "default": "work_around"
+    }
+  }
+}

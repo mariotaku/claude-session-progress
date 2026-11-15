@@ -1,0 +1,6 @@
+{
+  "name": "claude-session-progress",
+  "description": "The session-progress mod for Claude Code: a Progress pane beside the chat.",
+  "owner": { "name": "Mariotaku" },
+  "plugins": [{ "name": "session-progress", "source": "./" }]
+}
